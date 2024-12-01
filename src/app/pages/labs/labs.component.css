@@ -1,0 +1,25 @@
+.container {
+  padding: 3rem;
+
+  .buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+
+  .box {
+    height: 10px;
+    display: block;
+    background-color: #6e49fe;
+  }
+
+  .message-error {
+    color: red;
+    opacity: 0;
+    transition: all linear .15s;
+  }
+
+  .message-error.show {
+    opacity: 1;
+  }
+}
