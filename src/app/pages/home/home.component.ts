@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { NgForOf } from '@angular/common';
+import { Component, computed, effect, inject, Injector, signal } from '@angular/core';
+import { NgForOf, NgIf } from '@angular/common';
 import { Task } from '../../models/task.model';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -7,36 +7,34 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
   selector: 'app-home',
   imports: [
     NgForOf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  tasksSignal = signal<Task[]>([
-    {
-      id: Date.now(),
-      title: 'Install ng CLI',
-      completed: false
-    },
-    {
-      id: Date.now(),
-      title: 'Create new project',
-      completed: false
-    },
-    {
-      id: Date.now(),
-      title: 'Create Component',
-      completed: false
-    },
-    {
-      id: Date.now(),
-      title: 'Create service',
-      completed: false
-    }
-  ]);
-  tasksFilter = signal('all');
+  tasksSignal = signal<Task[]>([]);
+  tasksFilter = signal<'all' | 'pending' | 'completed'>('all');
   selectedTask = signal<number | null>(null);
+  tasksByFilter = computed(() => {
+    const filter = this.tasksFilter();
+    const tasks = this.tasksSignal();
+
+    if (filter === 'all') {
+      return tasks;
+    }
+
+    if (filter === 'completed') {
+      return tasks.filter(task => task.completed);
+    }
+
+    if (filter === 'pending') {
+      return tasks.filter(task => !task.completed);
+    }
+
+    return tasks;
+  })
 
   newTaskControl = new FormControl('', {
     nonNullable: true,
@@ -45,6 +43,26 @@ export class HomeComponent {
       Validators.pattern(/.*\S.*/)
     ]
   });
+
+  injector = inject(Injector);
+
+  ngOnInit() {
+    const tasks = localStorage.getItem('tasks');
+
+    if(tasks) {
+      const tasksParsed = JSON.parse(tasks);
+      this.tasksSignal.set(tasksParsed);
+    }
+
+    this.trackTasks();
+  }
+
+  trackTasks() {
+    effect(() => {
+      const tasks = this.tasksSignal();
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }, { injector: this.injector });
+  }
 
 
   handleAddTask() {
@@ -110,7 +128,7 @@ export class HomeComponent {
     this.selectedTask.set(null);
   }
 
-  handleUpdateFilter(filter: string) {
+  handleUpdateFilter(filter: 'all' | 'pending' | 'completed') {
     this.tasksFilter.set(filter);
   }
 }

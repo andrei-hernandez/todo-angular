@@ -21,7 +21,7 @@
           [class.completed]="task.completed"
           (dblclick)="handleSelectTask(taskIndex)"
           [class.editing]="selectedTask() === taskIndex"
-          *ngFor="let task of tasksSignal(); index as taskIndex"
+          *ngFor="let task of tasksByFilter(); index as taskIndex"
         >
           <div class="view">
             <input
@@ -66,9 +66,9 @@
       </ul>
     </section>
     <!-- This footer should be hidden by default and shown when there are todos -->
-    <footer class="footer">
+    <footer *ngIf="tasksSignal().length > 0" class="footer">
       <!-- This should be `0 items left` by default -->
-      <span class="todo-count"><strong>{{ tasksSignal().length }}</strong> {{ tasksSignal().length === 1 ? 'item' : 'items' }} left</span>
+      <span class="todo-count"><strong>{{ tasksByFilter().length }}</strong> {{ tasksByFilter().length === 1 ? 'item' : 'items' }} left</span>
       <!-- Remove this if you don't implement routing -->
       <ul class="filters">
         <li>
@@ -80,10 +80,20 @@
           </a>
         </li>
         <li>
-          <a (click)="handleUpdateFilter('pending')">Pending</a>
+          <a
+            (click)="handleUpdateFilter('pending')"
+            [class.selected]="tasksFilter() === 'pending'"
+          >
+            Pending
+          </a>
         </li>
         <li>
-          <a (click)="handleUpdateFilter('completed')">Completed</a>
+          <a
+            (click)="handleUpdateFilter('completed')"
+            [class.selected]="tasksFilter() === 'completed'"
+          >
+            Completed
+          </a>
         </li>
       </ul>
       <!-- Hidden if no completed items are left ↓ -->
