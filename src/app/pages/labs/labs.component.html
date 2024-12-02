@@ -62,20 +62,60 @@
       <p *ngSwitchDefault>No soy nadie</p>
     </div>
   </div>
-  <hr/>
-  <input type="color" [formControl]="colorCtrl">
-  <p>{{ colorCtrl.value }}</p>
-  <svg>
-    <g>
-      <rect x="0" y="0" height="100"  width="100" [attr.fill]="colorCtrl.value"/>
-    </g>
-  </svg>
-  <hr/>
-  <input type="range" [formControl]="widthCtrl">
-  <span class="box" [style.width.%]="widthCtrl.value"></span>
-  <hr/>
   <div>
-    <input type="text" [formControl]="nameCtrl"><br />
-    <span class="message-error" [class.show]="nameCtrl.invalid && !nameCtrl.untouched">Nombre invalido</span>
+    <h4>If new syntax</h4>
+    @if (personSignal().name === 'Andrei' && personSignal().age >= 18) {
+      <p>
+        Soy Andrei y soy mayor de edad
+      </p>
+    } @else {
+      <p>
+        Soy Andrei y soy menor de edad
+      </p>
+    }
+  </div>
+    <h4>for new syntax</h4>
+    <ul>
+      @for (task of tasks; track task; let i = $index) {
+        <li>{{ task }}</li>
+      } @empty {
+        <li>
+          <strong>
+            No tasks
+          </strong>
+        </li>
+      }
+    </ul>
+  <div>
+    <h4>switch new syntax</h4>
+    @switch (personSignal().name) {
+      @case('Andrei') {
+        <p>Soy Andrei</p>
+      }
+      @case('Juan') {
+        <p>Soy Juan</p>
+      }
+      @default {
+        <p>No soy nadie</p>
+      }
+    }
+  </div>
+  <div>
+    <hr/>
+    <input type="color" [formControl]="colorCtrl">
+    <p>{{ colorCtrl.value }}</p>
+    <svg>
+      <g>
+        <rect x="0" y="0" height="100"  width="100" [attr.fill]="colorCtrl.value"/>
+      </g>
+    </svg>
+    <hr/>
+    <input type="range" [formControl]="widthCtrl">
+    <span class="box" [style.width.%]="widthCtrl.value"></span>
+    <hr/>
+    <div>
+      <input type="text" [formControl]="nameCtrl"><br />
+      <span class="message-error" [class.show]="nameCtrl.invalid && !nameCtrl.untouched">Nombre invalido</span>
+    </div>
   </div>
 </div>

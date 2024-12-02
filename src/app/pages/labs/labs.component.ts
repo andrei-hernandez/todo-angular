@@ -38,7 +38,7 @@ export class LabsComponent {
     avatar: 'https://angular.io/assets/images/logos/angular/angular.png'
   }
   personSignal = signal({
-    name: 'Juan',
+    name: 'Andrei',
     age: 22,
     avatar: 'https://angular.io/assets/images/logos/angular/angular.png'
   });

@@ -1,15 +1,13 @@
 import { Component, computed, effect, inject, Injector, signal } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { Task } from '../../models/task.model';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   imports: [
-    NgForOf,
-    ReactiveFormsModule,
-    NgIf,
-  ],
+    ReactiveFormsModule
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
